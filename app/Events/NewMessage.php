@@ -40,6 +40,6 @@ class NewMessage implements ShouldBroadcast
     public function broadcastWith()
     {
         //$this->message->load('fromContact');
-        //return ["message" => $this->message];
+        return ["message" => $this->message];
     }
 }
