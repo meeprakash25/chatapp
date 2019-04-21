@@ -36,6 +36,7 @@
         },
         methods: {
             startConversationWith(contact) {
+                this.updateUnreadContact(contact, true);
                 let self = this;
                 axios.get(`/conversation/${contact.id}`)
                     .then(function (response) {
@@ -44,16 +45,28 @@
                         }
                     );
             },
-            saveNewMessage(text) {
-                this.messages.push(text);
+            saveNewMessage(message) {
+                this.messages.push(message);
             },
             handleIncoming(message) {
                 if (this.selectedContact && message.from == this.selectedContact.id) {
                     this.saveNewMessage(message);
-                    // return;
+                    return;
                 }
 
-                alert(message.text);
+                this.updateUnreadContact(message.from_contact,false);
+            },
+            updateUnreadContact(contact, reset) {
+                this.contacts = this.contacts.map((single) => {
+                    if (single.id !== contact.id) {
+                        return single;
+                    }
+                    if (reset)
+                        single.unread = 0;
+                    else
+                        single.unread += 1;
+                    return single;
+                })
             }
         },
         components: {
